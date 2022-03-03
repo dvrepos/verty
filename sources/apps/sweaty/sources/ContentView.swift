@@ -4,13 +4,12 @@ import Logging
 struct ContentView: View {
     var body: some View {
         VStack {
-            Text("Hello, Tuist project!")
-                .padding()
+            Text(SweatyStrings.hiMessage("Tuist + SwiftGen"))
             Button {
                 getLogger().debug("print me")
                 getLogger().trace("is trace level on ? yes!!!")
             } label: {
-                Text("i10n has to be implemented")
+                Text("l10n schemas to be implemented")
             }
         }
     }
