@@ -2,14 +2,40 @@ import SwiftUI
 import Logging
 
 struct ContentView: View {
+    
+    @State var isChecked:Bool = true
+    @State var isNotChecked:Bool = true
+    func toggle(){isChecked = !isChecked}
+    
     var body: some View {
         VStack {
             Text(SweatyStrings.hiMessage("Tuist + SwiftGen"))
+
+            Button(action: toggle){
+                HStack{
+                    Image(systemName: isChecked ? "checkmark.square": "square")
+                    Text("schemas to be implmenented")
+                }
+            }
+
+            Button(action: toggle){
+                HStack{
+                    Image(systemName: isChecked ? "checkmark.square": "square")
+                    Text("l10n")
+                }
+            }
+
+            Button(action: toggle){
+                HStack{
+                    Image(systemName: isChecked ? "checkmark.square": "square")
+                    Text("logging")
+                }
+            }
             Button {
                 getLogger().debug("print me")
                 getLogger().trace("is trace level on ? yes!!!")
             } label: {
-                Text("l10n schemas to be implemented")
+                Text("check clicks")
             }
         }
     }
