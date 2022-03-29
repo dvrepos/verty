@@ -1,0 +1,35 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+POST https://httpbin.org/post
+Content-Type: application/json
+
+{
+  "id": 999,
+  "value": "content"
+}
+###
+
+POST https://be.wizzair.com/9.16.0/Api/search/inspirationalFlights
+Accept: application/json, text/plain, */*
+Referer: https://wizzair.com/en-gb/flights/trip-planner
+Origin: https://wizzair.com
+User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Mobile Safari/537.36
+Content-Type: application/json;charset=UTF-8
+
+{
+  "departureStation": "BUD",
+  "destinationCategory": 0,
+  "dateRange": 2,
+  "from": "2019-09-01",
+  "to": "2019-11-01",
+  "travelDuration": 3,
+  "priceRange": 0
+}
+
+###
+
