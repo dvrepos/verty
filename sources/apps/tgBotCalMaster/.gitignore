@@ -1,4 +1,5 @@
 tmp/
+*.ignored 
 
 # Created by https://www.toptal.com/developers/gitignore/api/java,jetbrains,gradle,macos,windows,vagrant
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,jetbrains,gradle,macos,windows,vagrant
