@@ -1,4 +1,4 @@
-# monorepo to host useful apps and scrips
+# monorepo to host useful apps and scripts
 ## telegram bot (sources/apps/doSports_Bot) which tracks a few sport activities 
 ### used libraries 
 1. h2database http://www.h2database.com/html/main.html 
