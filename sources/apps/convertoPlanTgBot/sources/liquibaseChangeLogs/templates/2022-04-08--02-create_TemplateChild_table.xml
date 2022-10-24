@@ -10,6 +10,7 @@
             <column name="templateChildId" type="bigint" autoIncrement="true" incrementBy="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="clobColumn" type="clob" />
             <column name="templateParent_templateParentId" type="bigint">
                 <constraints nullable="false"/>
             </column>
