@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    <changeSet logicalFilePath="withoutPath" id="sports_1" author="DoSports_Bot">
+        <comment>sports</comment>
+        <createTable tableName="Sports">
+            <column name="sportsId" type="bigint" autoIncrement="true" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="doneAt" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sportName" type="varchar2(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="sportValue" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="sportValueType" type="tinyint">
+                <!-- 1:duration (secs) or 2:repetition (quantity) or 3:distance (meters) -->
+                <constraints nullable="false" />
+            </column>
+            <column name="customer_customerId" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet logicalFilePath="withoutPath" id="sports_2" author="DoSports_Bot">
+        <addForeignKeyConstraint baseColumnNames="customer_customerId"
+          baseTableName="sports"
+          constraintName="fk_sports_customer"
+          referencedColumnNames="customerId"
+          referencedTableName="customer"
+        />
+    </changeSet>
+</databaseChangeLog>

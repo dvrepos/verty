@@ -1,0 +1,152 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'pmd'
+    id 'org.liquibase.gradle' version '2.1.0'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'sources/app/main/java'
+        }
+        resources {
+            srcDirs "sources/app/main/resources"
+        }
+    }
+    test {
+        java {
+            srcDirs = ['sources/app/test/java']
+        }
+        resources {
+            srcDirs "sources/app/test/resources"
+        }
+    }
+}
+
+application {
+    applicationDefaultJvmArgs = ["--add-opens", "java.base/jdk.internal.loader=ALL-UNNAMED"]
+    mainClass.set("domain.my.doSports_Bot.bot.Runner")
+}
+
+dependencies {
+
+    final LOMBOK__VERSION = '1.18.20'
+    final SLF4J__VERSION = '1.7.31'
+    final LOGBACK__VERSION = '1.2.3'
+    final TESTNG__VERSION = '7.4.0'
+    final MOCKITO__VERSION = '3.12.4'
+    final GUAVA__VERSION = '30.1.1-jre'
+    final H2__VERSION = '2.1.210'
+    final TGBOTS__VERSION = '6.1.0'
+    final YANK__VERSION = '3.4.0'
+    final GUICE__VERSION = '5.1.0'
+
+//    core
+    dependencies {
+        implementation('org.projectlombok:lombok') {
+            version {
+                require LOMBOK__VERSION
+            }
+        }
+        testImplementation('org.projectlombok:lombok') {
+            version {
+                require LOMBOK__VERSION
+            }
+        }
+        annotationProcessor('org.projectlombok:lombok') {
+            version {
+                require LOMBOK__VERSION
+            }
+        }
+        testAnnotationProcessor('org.projectlombok:lombok') {
+            version {
+                require LOMBOK__VERSION
+            }
+        }
+
+        liquibaseRuntime 'org.liquibase:liquibase-core:4.9.0'
+        liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.2'
+        liquibaseRuntime 'info.picocli:picocli:4.6.1'
+        liquibaseRuntime group: 'com.h2database', name: 'h2', version: H2__VERSION
+        liquibaseRuntime group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+    }
+
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: SLF4J__VERSION
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: LOGBACK__VERSION
+    implementation group: 'com.google.guava', name: 'guava', version: GUAVA__VERSION
+    implementation group: 'org.telegram', name: 'telegrambots', version: TGBOTS__VERSION
+    implementation group: 'com.h2database', name: 'h2', version: H2__VERSION
+    implementation group: 'org.knowm', name: 'yank', version: YANK__VERSION
+    implementation group: 'com.google.inject', name: 'guice', version: GUICE__VERSION
+
+//    testing
+    testImplementation group: 'org.testng', name: 'testng', version: TESTNG__VERSION
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: MOCKITO__VERSION
+}
+
+configurations.all {
+//  logback only
+    exclude group: "org.slf4j", module: "slf4j-log4j12"
+    exclude group: "log4j", module: "log4j"
+    exclude group: "org.slf4j", module: "slf4j-nop"
+//    something for liquibase plugin
+//    liquibaseRuntime.extendsFrom runtime
+}
+
+test {
+    useTestNG() {
+        options ->
+            options.parallel = 'methods'
+            options.threadCount = 4
+    }
+    testLogging.showStandardStreams = true
+    testLogging.debug {
+        events "started", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}
+
+tasks.register('copySettings', Copy) {
+    dependsOn(processResources)
+    if (project.hasProperty("useSettings")) {
+        println "copying settings from [" + project.getProperty("useSettings") + "] profile..."
+        from layout.projectDirectory.dir("sources/profiles/" + project.getProperty("useSettings"))
+        into layout.projectDirectory.dir("sources/app/main/resources")
+    } else {
+        println "copying settings from [production] profile..."
+        from layout.projectDirectory.dir("sources/profiles/production")
+        into layout.projectDirectory.dir("sources/app/main/resources")
+    }
+}
+
+def props = new Properties()
+file("sources/app/main/resources/project.properties").withInputStream { props.load(it) }
+println "using settings from " + props.getProperty("profileName") + " profile"
+
+def dbProps = new Properties()
+file("sources/app/main/resources/propertiesToBe.ignored").withInputStream { dbProps.load(it) }
+println "=== dbURL: " + dbProps.getProperty("db.url") + " ==="
+
+liquibase {
+    activities {
+        main {
+            changeLogFile './sources/liquibaseChangeLogs/changelog.xml'
+            url dbProps.getProperty("db.url")
+            username dbProps.getProperty("db.admin.username")
+            password dbProps.getProperty("db.admin.password")
+        }
+    }
+//    runList = project.ext.runList
+}
+

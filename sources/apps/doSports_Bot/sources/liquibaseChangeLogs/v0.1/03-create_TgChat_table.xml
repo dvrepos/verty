@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    <changeSet logicalFilePath="withoutPath" id="tgChat_1" author="DoSports_Bot">
+        <comment>Attributes for telegram chat</comment>
+        <createTable tableName="TgChat">
+            <column name="tgChatId" type="bigint" autoIncrement="true" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="chatId" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="localeAsLanguageTag" type="varchar(77)">
+                <constraints nullable="false" />
+            </column>
+            <column name="tgUser_tgUserId" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet logicalFilePath="withoutPath" id="tgChat_2" author="DoSports_Bot">
+        <addForeignKeyConstraint baseColumnNames="tgUser_tgUserId"
+                                 baseTableName="TgChat"
+                                 constraintName="fk_tgChat_tgUser"
+                                 referencedColumnNames="tgUserId"
+                                 referencedTableName="tgUser"/>
+    </changeSet>
+    <changeSet logicalFilePath="withoutPath" id="tgChat_3" author="DoSports_Bot">
+        <comment>default locale for chat</comment>
+        <addNotNullConstraint
+          columnName="localeAsLanguageTag"
+          columnDataType="varchar(77)"
+          defaultNullValue="en-US"
+          tableName="TgChat"/>
+    </changeSet>
+</databaseChangeLog>
