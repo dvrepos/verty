@@ -23,11 +23,13 @@ public class GeneralMenuBuilder {
         .text(GeneralMessageHandler.COMMAND_PLANK).build();
     KeyboardButton buttonSwimming = KeyboardButton.builder()
         .text(GeneralMessageHandler.COMMAND_SWIMMING).build();
+    KeyboardButton buttonBurpee = KeyboardButton.builder()
+        .text(GeneralMessageHandler.COMMAND_BURPEE).build();
     KeyboardButton buttonStats = KeyboardButton.builder()
         .text(GeneralMessageHandler.COMMAND_STATS).build();
 
     KeyboardRow keyboardRowSports1 = new KeyboardRow(List.of(buttonPushups, buttonPlank));
-    KeyboardRow keyboardRowSports2 = new KeyboardRow(List.of(buttonSquats, buttonSwimming));
+    KeyboardRow keyboardRowSports2 = new KeyboardRow(List.of(buttonSquats, buttonBurpee, buttonSwimming));
     KeyboardRow keyboardRowSports3 = new KeyboardRow(List.of(buttonStats));
 
     return ReplyKeyboardMarkup.builder()
@@ -45,6 +47,10 @@ public class GeneralMenuBuilder {
   }
   public void processSquats(long tgUserId) {
     InfoSaver.addCommandForTgUserId(tgUserId, GeneralMessageHandler.COMMAND_SQUATS);
+  }
+
+  public void processBurpee(long tgUserId) {
+    InfoSaver.addCommandForTgUserId(tgUserId, GeneralMessageHandler.COMMAND_BURPEE);
   }
 
   public void processSwimming(long tgUserId) {

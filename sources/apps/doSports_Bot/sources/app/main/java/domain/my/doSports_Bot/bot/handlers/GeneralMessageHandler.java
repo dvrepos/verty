@@ -25,6 +25,7 @@ public class GeneralMessageHandler {
   public static final String COMMAND_STATS = "/dailyStatistics";
   public static final String SAVED = "saved ;) ";
   public static final String WRONG_INPUT_VALUE = "wrong entered value";
+  public static final String COMMAND_BURPEE = "/burpee";
 
   public SendMessage createOutgoingMessage(Message inMsg) {
     String inMsgText = inMsg.getText();
@@ -68,6 +69,13 @@ public class GeneralMessageHandler {
         outTMsg = "=== number of squats required ===";
         outTMsg = outTMsg + "\n\n  send me quantity of your squats which you done";
         GeneralMenuBuilder.processSquats(tgUserId);
+        resSendMessage.setText(empty);
+      }
+      case COMMAND_BURPEE -> {
+        log.trace("adding burpees...");
+        outTMsg = "=== number of burpees required ===";
+        outTMsg = outTMsg + "\n\n  send me quantity of your burpees which you done";
+        GeneralMenuBuilder.processBurpee(tgUserId);
         resSendMessage.setText(empty);
       }
       case COMMAND_SWIMMING -> {

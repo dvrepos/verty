@@ -71,6 +71,9 @@ public class MainTgBotHandler extends TelegramLongPollingBot {
       if (IncomingTextParser.isItSquarts(receivedText, tgUserId)) {
         sendMessageRequest = processSport.process(message, custId, GeneralMessageHandler.COMMAND_SQUATS);
       }
+      if (IncomingTextParser.isItBurpees(receivedText, tgUserId)) {
+        sendMessageRequest = processSport.process(message, custId, GeneralMessageHandler.COMMAND_BURPEE);
+      }
       if (IncomingTextParser.isItSwimming(receivedText, tgUserId)) {
         sendMessageRequest = processSport.process(message, custId, GeneralMessageHandler.COMMAND_SWIMMING);
       }
