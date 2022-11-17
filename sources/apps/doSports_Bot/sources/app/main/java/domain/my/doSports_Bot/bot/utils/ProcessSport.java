@@ -33,6 +33,10 @@ public class ProcessSport {
         log.debug("saving values for burpees");
         sportValueType = 2; // executions
       }
+      case GeneralMessageHandler.COMMAND_CRUNCHES -> {
+        log.debug("saving values for crunches");
+        sportValueType = 2; // executions
+      }
       case GeneralMessageHandler.COMMAND_SWIMMING -> {
         log.debug("saving values for swimming");
         sportValueType = 3; // distance

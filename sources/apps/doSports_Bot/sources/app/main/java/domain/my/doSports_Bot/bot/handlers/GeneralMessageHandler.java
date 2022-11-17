@@ -3,6 +3,8 @@ package domain.my.doSports_Bot.bot.handlers;
 import domain.my.doSports_Bot.bot.menubuilders.GeneralMenuBuilder;
 import domain.my.doSports_Bot.entities.UserStats;
 import domain.my.doSports_Bot.utils.EntityProcessor;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +25,12 @@ public class GeneralMessageHandler {
   public static final String COMMAND_PLANK = "/plank";
   public static final String COMMAND_SWIMMING = "/swimming";
   public static final String COMMAND_STATS = "/dailyStatistics";
+  public static final String COMMAND_YESTERDAY_STATS = "/yesterdayStatistics";
+  public static final String COMMAND_7DAYS_STATS = "/7daysStatistics";
   public static final String SAVED = "saved ;) ";
   public static final String WRONG_INPUT_VALUE = "wrong entered value";
   public static final String COMMAND_BURPEE = "/burpee";
+  public static final String COMMAND_CRUNCHES = "/crunches";
 
   public SendMessage createOutgoingMessage(Message inMsg) {
     String inMsgText = inMsg.getText();
@@ -78,6 +83,13 @@ public class GeneralMessageHandler {
         GeneralMenuBuilder.processBurpee(tgUserId);
         resSendMessage.setText(empty);
       }
+      case COMMAND_CRUNCHES -> {
+        log.trace("adding crunches...");
+        outTMsg = "=== number of crunches required ===";
+        outTMsg = outTMsg + "\n\n  send me quantity of your crunches which you done";
+        GeneralMenuBuilder.processCrunches(tgUserId);
+        resSendMessage.setText(empty);
+      }
       case COMMAND_SWIMMING -> {
         log.trace("adding swimming...");
         outTMsg = "=== distance !!! in meters !!! of squats required ===";
@@ -95,6 +107,47 @@ public class GeneralMessageHandler {
               .append(userStat.getSumSportValue());
         }
         outTMsg = "=== daily statistics ===";
+        outTMsg = outTMsg + "\n" + userStats;
+        resSendMessage.setText(empty);
+      }
+      case COMMAND_YESTERDAY_STATS -> {
+        Long customerId = Yank.queryScalarSQLKey("findCustomerIdByTgUserId", Long.class, new Long[]{tgUserId});
+        log.trace("yesterday statistics...");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date endDate = calendar.getTime();
+        calendar.add(Calendar.DATE, -1);
+        Date startDate = calendar.getTime();
+        List<UserStats> userStatsList = EntityProcessor.showUserStats(customerId, startDate, endDate);
+        StringBuilder userStats = new StringBuilder();
+        for (UserStats userStat : userStatsList) {
+          userStats.append("\n\n").append(userStat.getSportName()).append(" > ")
+              .append(userStat.getSumSportValue());
+        }
+        outTMsg = "=== yesterday statistics ===";
+        outTMsg = outTMsg + "\n" + userStats;
+        resSendMessage.setText(empty);
+      }
+      case COMMAND_7DAYS_STATS -> {
+        Long customerId = Yank.queryScalarSQLKey("findCustomerIdByTgUserId", Long.class, new Long[]{tgUserId});
+        log.trace("7 days statistics...");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.add(Calendar.DATE, -7);
+        Date startDate = calendar.getTime();
+        List<UserStats> userStatsList = EntityProcessor.showUserStats(customerId, startDate, new Date());
+        StringBuilder userStats = new StringBuilder();
+        for (UserStats userStat : userStatsList) {
+          userStats.append("\n\n").append(userStat.getSportName()).append(" > ")
+              .append(userStat.getSumSportValue());
+        }
+        outTMsg = "=== 7 days statistics ===";
         outTMsg = outTMsg + "\n" + userStats;
         resSendMessage.setText(empty);
       }

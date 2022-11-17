@@ -23,17 +23,24 @@ public class GeneralMenuBuilder {
         .text(GeneralMessageHandler.COMMAND_PLANK).build();
     KeyboardButton buttonSwimming = KeyboardButton.builder()
         .text(GeneralMessageHandler.COMMAND_SWIMMING).build();
+    KeyboardButton buttonCrunches = KeyboardButton.builder()
+        .text(GeneralMessageHandler.COMMAND_CRUNCHES).build();
     KeyboardButton buttonBurpee = KeyboardButton.builder()
         .text(GeneralMessageHandler.COMMAND_BURPEE).build();
     KeyboardButton buttonStats = KeyboardButton.builder()
         .text(GeneralMessageHandler.COMMAND_STATS).build();
+    KeyboardButton buttonYesterdayStats = KeyboardButton.builder()
+        .text(GeneralMessageHandler.COMMAND_YESTERDAY_STATS).build();
+    KeyboardButton button7DaysStat = KeyboardButton.builder()
+        .text(GeneralMessageHandler.COMMAND_7DAYS_STATS).build();
 
-    KeyboardRow keyboardRowSports1 = new KeyboardRow(List.of(buttonPushups, buttonPlank));
-    KeyboardRow keyboardRowSports2 = new KeyboardRow(List.of(buttonSquats, buttonBurpee, buttonSwimming));
+    KeyboardRow keyboardRowSports1 = new KeyboardRow(List.of(buttonPushups, buttonSquats, buttonCrunches));
+    KeyboardRow keyboardRowSports2 = new KeyboardRow(List.of(buttonPlank, buttonBurpee));
     KeyboardRow keyboardRowSports3 = new KeyboardRow(List.of(buttonStats));
+    KeyboardRow keyboardRowSports4 = new KeyboardRow(List.of(buttonYesterdayStats, button7DaysStat));
 
     return ReplyKeyboardMarkup.builder()
-        .keyboard(List.of(keyboardRowSports1, keyboardRowSports2, keyboardRowSports3))
+        .keyboard(List.of(keyboardRowSports1, keyboardRowSports2, keyboardRowSports3, keyboardRowSports4))
         .oneTimeKeyboard(true)
         .build();
   }
@@ -55,6 +62,10 @@ public class GeneralMenuBuilder {
 
   public void processSwimming(long tgUserId) {
     InfoSaver.addCommandForTgUserId(tgUserId, GeneralMessageHandler.COMMAND_SWIMMING);
+  }
+
+  public void processCrunches(long tgUserId) {
+    InfoSaver.addCommandForTgUserId(tgUserId, GeneralMessageHandler.COMMAND_CRUNCHES);
   }
 
 }

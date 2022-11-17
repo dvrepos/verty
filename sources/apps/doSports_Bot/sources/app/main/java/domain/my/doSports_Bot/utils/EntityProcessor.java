@@ -56,4 +56,10 @@ public class EntityProcessor {
     log.trace("querying customer {} daily statistics ...", customerId);
     return Yank.queryBeanListSQLKey("showCustomerDailyStats", UserStats.class, new Long[]{customerId});
   }
+
+  public List<UserStats> showUserStats(long customerId, Date startDate, Date endDate) {
+    log.trace("querying customer {} statistics for period from {} to {} ...", customerId, startDate, endDate);
+    return Yank.queryBeanListSQLKey("showCustomerStatsForPeriod", UserStats.class,
+        new Object[]{startDate, endDate, customerId});
+  }
 }

@@ -41,4 +41,8 @@ public class IncomingTextParser {
     log.debug("checking input text {} as value for squarts...", inMsgText);
     return InfoSaver.isItExpectedCommandForTgUserId(tgUserId, GeneralMessageHandler.COMMAND_BURPEE);
   }
+  public static boolean isItCrunches(String inMsgText, long tgUserId) {
+    log.debug("checking input text {} as value for crunches...", inMsgText);
+    return InfoSaver.isItExpectedCommandForTgUserId(tgUserId, GeneralMessageHandler.COMMAND_CRUNCHES);
+  }
 }
